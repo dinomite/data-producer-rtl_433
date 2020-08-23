@@ -1,5 +1,9 @@
 package data.producer.rtl_433
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.ktor.application.call
 import io.ktor.application.install
@@ -14,6 +18,8 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
+import java.io.BufferedReader
+import java.io.File
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.CompletableFuture
@@ -44,6 +50,21 @@ object Rtl433 {
         server.start(wait = false)
 
         logger.info("Startup time: ${Duration.between(start, Instant.now())}")
+
+        val input = File("/Users/dinomite/code/mine/data-producer-rtl_433").runCommand("bin/fake-rtl.sh")
+        input.forEachLine {
+            println("The line: $it")
+        }
     }
+}
+
+fun File.runCommand(command: String): BufferedReader {
+    return ProcessBuilder(*command.split("\\s".toRegex()).toTypedArray())
+            .directory(this)
+            .redirectOutput(ProcessBuilder.Redirect.PIPE)
+            .redirectError(ProcessBuilder.Redirect.PIPE)
+            .start()
+            .inputStream
+            .bufferedReader()
 }
 
