@@ -26,7 +26,9 @@ dependencies {
 
     runtimeOnly("ch.qos.logback", "logback-classic", "1.2.3")
 
+    implementation("com.fasterxml.jackson.core", "jackson-core", "2.11.2")
     implementation("com.fasterxml.jackson.core", "jackson-databind", "2.11.2")
+    implementation("com.fasterxml.jackson.datatype", "jackson-datatype-jsr310", "2.11.2")
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", "2.11.2")
 
     testImplementation(kotlin("test-junit5"))
