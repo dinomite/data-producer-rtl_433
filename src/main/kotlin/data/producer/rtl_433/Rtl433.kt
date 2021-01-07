@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import data.producer.rtl_433.Rtl433.nodeData
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -66,8 +67,7 @@ object Rtl433 {
             objectMapper.readValue<RtlData>(line)
                     .toSensors()
                     .forEach {
-                        val foo = nodeData.getOrDefault(it.name(), it)
-                        nodeData[it.name()] = foo
+                        nodeData[it.name()] = nodeData.getOrDefault(it.name(), it)
                     }
             println(nodeData)
         }
